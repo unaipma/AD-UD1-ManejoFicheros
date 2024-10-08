@@ -7,7 +7,8 @@ package inicializar;
 import vista.Menu;
 
 /**
- *
+ *Inicia el programa
+ * 
  * @author Vespertino
  */
 public class Inicio {
