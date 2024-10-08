@@ -1,0 +1,11 @@
+idao\JugadorDao.class
+idao\JugadorBinarioDAO.class
+idao\JugadorTextoDAO.class
+idao\JugadorXMLDAO.class
+controlador\JugadorControlador.class
+menu\Menu.class
+idao\JugadorAleatorioDAO.class
+inicializar\Inicio.class
+idao\JugadorObjetoDAO.class
+modelo\Jugador.class
+vista\JugadorVista.class
