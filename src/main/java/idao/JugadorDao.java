@@ -13,10 +13,10 @@ import modelo.Jugador;
  */
 public abstract class JugadorDao {
     // Definición de los métodos CRUD abstractos
-    public abstract void addJugador(Jugador jugador) throws Exception;
-    public abstract void deleteJugador(int id) throws Exception;
-    public abstract void modifyJugador(Jugador jugador) throws Exception;
-    public abstract Jugador getJugadorById(int id) throws Exception;
-    public abstract List<Jugador> getAllJugadores() throws Exception;
+    public abstract void añadirJugador(Jugador jugador) throws Exception;
+    public abstract void eliminarJugador(int id) throws Exception;
+    public abstract void modificarJugador(Jugador jugador) throws Exception;
+    public abstract Jugador buscarPorID(int id) throws Exception;
+    public abstract List<Jugador> listarJugadores() throws Exception;
     
 }

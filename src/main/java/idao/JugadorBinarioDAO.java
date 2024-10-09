@@ -6,6 +6,7 @@ package idao;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -30,23 +31,26 @@ public class JugadorBinarioDAO extends JugadorDao {
     }
 
     @Override
-    public void addJugador(Jugador jugador) throws IOException {
+    public void añadirJugador(Jugador jugador) throws IOException {
         // Abrimos el fichero en modo append (añadir al final).
-
-        try (DataOutputStream datosout = new DataOutputStream(new FileOutputStream(FICHERO_BINARIO, true))) {
+        DataOutputStream datosout = new DataOutputStream(new FileOutputStream(FICHERO_BINARIO, true));
+        try  {
             datosout.writeInt(jugador.getId());
             datosout.writeUTF(jugador.getNick());
             datosout.writeInt(jugador.getExperience());
             datosout.writeInt(jugador.getLifeLevel());
             datosout.writeInt(jugador.getCoins());
+        }catch(EOFException e) {
+        datosout.close();
         }
     }
 
     @Override
-    public void deleteJugador(int id) throws IOException {
+    public void eliminarJugador(int id) throws IOException {
 
-        List<Jugador> jugadores = getAllJugadores(); // Leer todos los jugadores
-        try (DataOutputStream datosout = new DataOutputStream(new FileOutputStream(FICHERO_BINARIO))) {
+        List<Jugador> jugadores = listarJugadores(); // Leer todos los jugadores
+        DataOutputStream datosout = new DataOutputStream(new FileOutputStream(FICHERO_BINARIO));
+        try  {
             for (Jugador jugador : jugadores) {
                 if (jugador.getId() != id) {
                     datosout.writeInt(jugador.getId());
@@ -56,13 +60,16 @@ public class JugadorBinarioDAO extends JugadorDao {
                     datosout.writeInt(jugador.getCoins());
                 }
             }
+        }catch(EOFException e) {
+        datosout.close();
         }
-    }
+    }    
 
     @Override
-    public void modifyJugador(Jugador jugador) throws IOException {
-        List<Jugador> jugadores = getAllJugadores(); // Leer todos los jugadores
-        try (DataOutputStream datosout = new DataOutputStream(new FileOutputStream(FICHERO_BINARIO))) {
+    public void modificarJugador(Jugador jugador) throws IOException {
+        List<Jugador> jugadores = listarJugadores(); // Leer todos los jugadores
+        DataOutputStream datosout = new DataOutputStream(new FileOutputStream(FICHERO_BINARIO));
+        try{
             for (Jugador j : jugadores) {
                 if (j.getId() == jugador.getId()) {
                     // Modificar el jugador encontrado
@@ -80,14 +87,16 @@ public class JugadorBinarioDAO extends JugadorDao {
                     datosout.writeInt(j.getCoins());
                 }
             }
+        }catch(EOFException e) {
+        datosout.close();
         }
 
     }
 
     @Override
-    public Jugador getJugadorById(int id) throws IOException {
-
-        try (DataInputStream datosinput = new DataInputStream(new FileInputStream(FICHERO_BINARIO))) {
+    public Jugador buscarPorID(int id) throws IOException {
+        DataInputStream datosinput = new DataInputStream(new FileInputStream(FICHERO_BINARIO));
+        try {
             while (datosinput.available() > 0) {
                 int jugadorId = datosinput.readInt();
                 String nick = datosinput.readUTF();
@@ -99,16 +108,18 @@ public class JugadorBinarioDAO extends JugadorDao {
                     return new Jugador(jugadorId, nick, experience, lifeLevel, coins);
                 }
             }
+        }catch(EOFException e) {
+        datosinput.close();
         }
         return null; // Si no se encuentra, retornar null.
     }
 
     @Override
-    public List<Jugador> getAllJugadores() throws IOException {
-
+    public List<Jugador> listarJugadores() throws IOException {
         List<Jugador> jugadores = new ArrayList<>();
-        try (DataInputStream datosinput = new DataInputStream(new FileInputStream(FICHERO_BINARIO))) {
-            while (datosinput.available() > 0) {
+        DataInputStream datosinput = new DataInputStream(new FileInputStream(FICHERO_BINARIO));
+        try {
+            while (true) {
                 int id = datosinput.readInt();
                 String nick = datosinput.readUTF();
                 int experience = datosinput.readInt();
@@ -116,6 +127,8 @@ public class JugadorBinarioDAO extends JugadorDao {
                 int coins = datosinput.readInt();
                 jugadores.add(new Jugador(id, nick, experience, lifeLevel, coins));
             }
+        }catch(EOFException e) {
+        datosinput.close();
         }
         return jugadores;
     }

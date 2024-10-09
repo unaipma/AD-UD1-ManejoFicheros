@@ -23,7 +23,7 @@ public class JugadorXMLDAO extends JugadorDao {
     private static final String FICHERO_XML = "jugadores.xml";
 
     @Override
-    public void addJugador(Jugador jugador) throws IOException {
+    public void añadirJugador(Jugador jugador) throws IOException {
         try {
             // Crear un nuevo documento o cargar el existente
             DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
@@ -75,7 +75,7 @@ public class JugadorXMLDAO extends JugadorDao {
     }
 
     @Override
-    public void deleteJugador(int id) throws Exception {
+    public void eliminarJugador(int id) throws Exception {
         Document doc = getDocument();
         NodeList jugadores = doc.getElementsByTagName("jugador");
         
@@ -91,13 +91,13 @@ public class JugadorXMLDAO extends JugadorDao {
     }
 
     @Override
-    public void modifyJugador(Jugador jugador) throws Exception {
-        deleteJugador(jugador.getId());
-        addJugador(jugador);
+    public void modificarJugador(Jugador jugador) throws Exception {
+        eliminarJugador(jugador.getId());
+        añadirJugador(jugador);
     }
 
     @Override
-    public Jugador getJugadorById(int id) throws Exception {
+    public Jugador buscarPorID(int id) throws Exception {
         Document doc = getDocument();
         NodeList jugadores = doc.getElementsByTagName("jugador");
         
@@ -112,7 +112,7 @@ public class JugadorXMLDAO extends JugadorDao {
     }
 
     @Override
-    public List<Jugador> getAllJugadores() throws Exception {
+    public List<Jugador> listarJugadores() throws Exception {
         List<Jugador> jugadores = new ArrayList<>();
         Document doc = getDocument();
         NodeList jugadoresList = doc.getElementsByTagName("jugador");

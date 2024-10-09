@@ -30,7 +30,7 @@ public class JugadorTextoDAO extends JugadorDao {
     }
 
     @Override
-    public void addJugador(Jugador jugador) throws IOException {
+    public void añadirJugador(Jugador jugador) throws IOException {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.write(jugadorToLine(jugador) + "\n");
@@ -38,16 +38,16 @@ public class JugadorTextoDAO extends JugadorDao {
     }
 
     @Override
-    public void deleteJugador(int id) throws IOException {
+    public void eliminarJugador(int id) throws IOException {
 
-        List<Jugador> jugadores = getAllJugadores();
+        List<Jugador> jugadores = listarJugadores();
         jugadores.removeIf(jugador -> jugador.getId() == id);
         saveAllJugadores(jugadores);
     }
 
     @Override
-    public void modifyJugador(Jugador jugador) throws IOException {
-        List<Jugador> jugadores = getAllJugadores();
+    public void modificarJugador(Jugador jugador) throws IOException {
+        List<Jugador> jugadores = listarJugadores();
         for (int i = 0; i < jugadores.size(); i++) {
             if (jugadores.get(i).getId() == jugador.getId()) {
                 jugadores.set(i, jugador);
@@ -59,9 +59,9 @@ public class JugadorTextoDAO extends JugadorDao {
     }
 
     @Override
-    public Jugador getJugadorById(int id) throws IOException {
+    public Jugador buscarPorID(int id) throws IOException {
        
-        List<Jugador> jugadores = getAllJugadores();
+        List<Jugador> jugadores = listarJugadores();
         for (Jugador jugador : jugadores) {
             if (jugador.getId() == id) {
                 return jugador;
@@ -71,7 +71,7 @@ public class JugadorTextoDAO extends JugadorDao {
     }
 
     @Override
-    public List<Jugador> getAllJugadores() throws IOException {
+    public List<Jugador> listarJugadores() throws IOException {
         
         List<Jugador> jugadores = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {

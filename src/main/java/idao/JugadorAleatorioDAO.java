@@ -28,7 +28,7 @@ public class JugadorAleatorioDAO extends JugadorDao {
     }
 
     @Override
-    public void addJugador(Jugador jugador) throws IOException {
+    public void añadirJugador(Jugador jugador) throws IOException {
 
         try (RandomAccessFile rand = new RandomAccessFile(filename, "rw")) {
             rand.seek(rand.length()); // Mueve el puntero al final del archivo
@@ -37,28 +37,28 @@ public class JugadorAleatorioDAO extends JugadorDao {
     }
 
     @Override
-    public void deleteJugador(int id) throws IOException {
+    public void eliminarJugador(int id) throws IOException {
 
-        List<Jugador> jugadores = getAllJugadores();
+        List<Jugador> jugadores = listarJugadores();
         jugadores.removeIf(jugador -> jugador.getId() == id);
         saveAllJugadores(jugadores);
     }
 
     @Override
-    public void modifyJugador(Jugador jugador) throws IOException {
-        List<Jugador> jugadores = getAllJugadores();
-        for (int i = 0; i < jugadores.size(); i++) {
-            if (jugadores.get(i).getId() == jugador.getId()) {
-                jugadores.set(i, jugador);
-                break;
+    public void modificarJugador(Jugador jugador) throws IOException {
+        List<Jugador> jugadores = listarJugadores();
+        
+        for (Jugador jugadore : jugadores) {
+            if (jugadore.getId()==jugador.getId()) {
+                jugadores.set(jugadore.getId(), jugador);
             }
         }
-        saveAllJugadores(jugadores);
+         saveAllJugadores(jugadores);
 
     }
 
     @Override
-    public Jugador getJugadorById(int id) throws IOException {
+    public Jugador buscarPorID(int id) throws IOException {
        
         try (RandomAccessFile rand = new RandomAccessFile(filename, "r")) {
             while (rand.getFilePointer() < rand.length()) {
@@ -73,7 +73,7 @@ public class JugadorAleatorioDAO extends JugadorDao {
     }
 
     @Override
-    public List<Jugador> getAllJugadores() throws IOException {
+    public List<Jugador> listarJugadores() throws IOException {
        
         List<Jugador> jugadores = new ArrayList<>();
         try (RandomAccessFile rand = new RandomAccessFile(filename, "r")) {

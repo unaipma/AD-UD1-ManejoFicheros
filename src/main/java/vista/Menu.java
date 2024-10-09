@@ -143,7 +143,7 @@ public class Menu {
         if (!archivo.exists()) {
             archivo.createNewFile();
         }
-        List<Jugador> lista = jugadorDAO.getAllJugadores();
+        List<Jugador> lista = jugadorDAO.listarJugadores();
         int tamaño = lista.size();
         if (tamaño != 0) {
             for (Jugador jugador : lista) {
@@ -170,7 +170,7 @@ public class Menu {
 
         Jugador nuevoJugador = new Jugador(id, nick, experience, lifeLevel, coins);
         try {
-            jugadorDAO.addJugador(nuevoJugador);
+            jugadorDAO.añadirJugador(nuevoJugador);
             System.out.println("Jugador agregado correctamente.");
         } catch (IOException e) {
             System.out.println("Error al agregar el jugador: " + e.getMessage());
@@ -187,10 +187,10 @@ public class Menu {
         System.out.print("Ingrese el ID del jugador a eliminar: ");
         int id = scanner.nextInt();
         try {
-            if (jugadorDAO.getJugadorById(id) == null) {
+            if (jugadorDAO.buscarPorID(id) == null) {
                 System.out.println("No existe el jugador con id:" + id);
             } else {
-                jugadorDAO.deleteJugador(id);
+                jugadorDAO.eliminarJugador(id);
                 System.out.println("El jugador con id:" + id + " se ha eliminado correctamente.");
             }
         } catch (Exception e) {
@@ -209,7 +209,7 @@ public class Menu {
         scanner.nextLine(); // Consumir el salto de línea
 
         try {
-            Jugador jugador = jugadorDAO.getJugadorById(id);
+            Jugador jugador = jugadorDAO.buscarPorID(id);
             if (jugador != null) {
                 System.out.println("Jugador encontrado: " + jugador);
 
@@ -231,7 +231,7 @@ public class Menu {
                 int coinsInput = compruebaNumero();
                 jugador.setCoins(coinsInput);
 
-                jugadorDAO.modifyJugador(jugador);
+                jugadorDAO.modificarJugador(jugador);
                 System.out.println("Jugador modificado correctamente.");
             } else {
                 System.out.println("Jugador con ID " + id + " no encontrado.");
@@ -250,7 +250,7 @@ public class Menu {
         System.out.print("Ingrese el ID del jugador a consultar: ");
         int id = scanner.nextInt();
         try {
-            Jugador jugador = jugadorDAO.getJugadorById(id);
+            Jugador jugador = jugadorDAO.buscarPorID(id);
             if (jugador != null) {
                 System.out.println("Datos del jugador: " + jugador);
             } else {
@@ -268,7 +268,7 @@ public class Menu {
      */
     private void listadoGeneral() {
         try {
-            List<Jugador> jugadores = jugadorDAO.getAllJugadores();
+            List<Jugador> jugadores = jugadorDAO.listarJugadores();
             System.out.println("\n--- Listado de Jugadores ---");
             for (Jugador jugador : jugadores) {
                 System.out.println(jugador);
