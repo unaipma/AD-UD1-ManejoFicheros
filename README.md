@@ -1,5 +1,5 @@
 # AD-UD1-ManejoFicheros
-Trabajo de acceso a datos de Manejo de ficheros
+Trabajo de acceso a datos de Manejo de ficheros Unai Pastor Martínez
 # Gestión de Jugadores
 
 Este programa permite gestionar información sobre jugadores mediante varias implementaciones de almacenamiento, incluyendo archivos de texto, binarios, objetos y XML. Los usuarios pueden añadir, eliminar, modificar y listar jugadores (CRUD)a través de un menú interactivo.
