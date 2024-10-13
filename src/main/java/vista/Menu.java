@@ -181,7 +181,6 @@ public class Menu {
     private void modificarJugador() {
         System.out.print("Ingrese el ID del jugador a modificar: ");
         int id = compruebaNumero();
-        scanner.nextLine(); // Consumir el salto de línea
 
         try {
             Jugador jugador = jugadorDAO.buscarPorID(id);
