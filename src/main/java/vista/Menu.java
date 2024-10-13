@@ -18,7 +18,6 @@ import java.util.Scanner;
 import modelo.Jugador;
 
 /**
- * Clase que representa un menú interactivo para gestionar jugadores en el sistema con opderaciones CRUD.
  * 
  * 
  * @author Vespertino
@@ -29,8 +28,7 @@ public class Menu {
     private Scanner scanner;
 
     /**
-     * Constructor que inicializa la configuración predeterminada del almacenamiento
-     * de jugadores (texto) y el Scanner para leer las entradas del usuario.
+     * Constructor que inicia el programa con el txt de manera predeterminada para almacenar.
      * 
      * @throws IOException Si ocurre un error al inicializar el almacenamiento.
      */
@@ -40,8 +38,7 @@ public class Menu {
     }
 
     /**
-     * Método principal que muestra el menú y controla la ejecución de las distintas
-     * opciones seleccionadas por el usuario. Permita realizar acciones sobre el jugador
+     * Método principal que muestra el menú para la gestión de los jugadores y recibe la orden del usuario
      * 
      * @throws Exception Si ocurre un error durante la ejecución de las operaciones.
      */
@@ -61,37 +58,21 @@ public class Menu {
             scanner.nextLine(); // Consumir el salto de línea después del entero
 
             switch (opcion) {
-                case 1:
-                    altaJugador();
-                    break;
-                case 2:
-                    bajaJugador();
-                    break;
-                case 3:
-                    modificarJugador();
-                    break;
-                case 4:
-                    listadoPorId();
-                    break;
-                case 5:
-                    listadoGeneral();
-                    break;
-                case 6:
-                    configurarAlmacenamiento();
-                    break;
-                case 7:
-                    System.out.println("Saliendo del programa...");
-                    break;
-                default:
-                    System.out.println("Opción inválida. Intente de nuevo.");
-                    break;
+                case 1 -> altaJugador();
+                case 2 -> bajaJugador();
+                case 3 -> modificarJugador();
+                case 4 -> listadoPorId();
+                case 5 -> listadoGeneral();
+                case 6 -> configurarAlmacenamiento();
+                case 7 -> System.out.println("Saliendo del programa...");
+                default -> System.out.println("Opción inválida. Intente de nuevo.");
             }
         } while (opcion != 7);
     }
 
     /**
      * Método que muestra un submenú para seleccionar el tipo de almacenamiento 
-     * de jugadores (Texto, Binario, Objetos, Aleatorio, XML).
+     * de jugadores 
      * 
      * @throws IOException Si ocurre un error al configurar el almacenamiento.
      */
@@ -129,10 +110,7 @@ public class Menu {
     }
 
     /**
-     * Método para registrar un nuevo jugador en el sistema. Solicita al usuario los
-     * detalles del jugador como el Nick, la experiencia, el nivel de vida y las 
-     * monedas, y lo agrega a jugadorDAO. Los jugadores se almacenan de acuerdo al 
-     * tipo de archivo seleccionado.
+     * Método para registrar un nuevo jugador en el sistema.
      * 
      * @throws Exception Si ocurre un error al agregar el jugador.
      */
@@ -180,8 +158,7 @@ public class Menu {
     }
 
     /**
-     * Método para eliminar un jugador de jugadorDAO. Solicita al usuario el ID del jugador 
-     * que desea eliminar y lo borra si existe.
+     * Método para eliminar un jugador  según su id
      */
     private void bajaJugador() {
         System.out.print("Ingrese el ID del jugador a eliminar: ");
@@ -199,13 +176,11 @@ public class Menu {
     }
 
     /**
-     * Método para modificar los datos de un jugador existente. Solicita al usuario el ID 
-     * del jugador que desea modificar y permite actualizar el Nick, la experiencia, 
-     * el nivel de vida y las monedas.
+     * Método para modificar los datos de un jugador existente por su id
      */
     private void modificarJugador() {
         System.out.print("Ingrese el ID del jugador a modificar: ");
-        int id = scanner.nextInt();
+        int id = compruebaNumero();
         scanner.nextLine(); // Consumir el salto de línea
 
         try {
@@ -244,11 +219,11 @@ public class Menu {
     }
 
     /**
-     * Método para listar la información de un jugador específico basado en su ID.
+     * Método para mostar la info de un jugador según su id.
      */
     private void listadoPorId() {
         System.out.print("Ingrese el ID del jugador a consultar: ");
-        int id = scanner.nextInt();
+        int id = compruebaNumero();
         try {
             Jugador jugador = jugadorDAO.buscarPorID(id);
             if (jugador != null) {
@@ -264,7 +239,7 @@ public class Menu {
     }
 
     /**
-     * Método para listar todos los jugadores en jugadorDAO. Muestra los datos de todos los jugadores almacenados.
+     * Método para listar todos los jugadores
      */
     private void listadoGeneral() {
         try {
@@ -281,7 +256,7 @@ public class Menu {
     }
 
     /**
-     * Método auxiliar que valida si la entrada es un número válido mayor o igual a 0 y comprueba que sea un int.
+     * Método que valida si la entrada es un número válido mayor o igual a 0 y comprueba que sea un int.
      * 
      * @return Un número int válido ingresado por el usuario.
      */

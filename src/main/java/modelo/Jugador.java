@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 
 /**
- * Clase que representa a un Jugador .
+ * 
  * 
  * @author Vespertino
  */

@@ -16,29 +16,29 @@ import java.util.List;
 import modelo.Jugador;
 
 /**
+ * 
  *
  * @author Vespertino
  */
 public class JugadorXMLDAO extends JugadorDao {
-    private static final String FICHERO_XML = "jugadores.xml";
+    private static final String FICHERO_XML = "jugadores.xml";//archivo donde se guardan los jugadores
 
+    /**
+     * Añade un nuevo jugador al archivo XML.
+     *
+     * @param jugador el jugador que se añade.
+     * @throws IOException en caso de que haya algún problema cuando se añade.
+     */
     @Override
     public void añadirJugador(Jugador jugador) throws IOException {
         try {
-            // Crear un nuevo documento o cargar el existente
             DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = fabrica.newDocumentBuilder();
-            Document doc;
+            
             File archxml = new File(FICHERO_XML);
-            if (archxml.exists()) {
-                doc = builder.parse(archxml);
-            } else {
-                doc = builder.newDocument();
-                Element rootElement = doc.createElement("jugadores");
-                doc.appendChild(rootElement);
-            }
+            Document doc= builder.parse(archxml);
 
-            // Crear un nuevo elemento jugador
+            // creo el elemento/objeto jugador en el xml
             Element jugadorElement = doc.createElement("jugador");
             jugadorElement.setAttribute("id", String.valueOf(jugador.getId()));
 
@@ -58,7 +58,7 @@ public class JugadorXMLDAO extends JugadorDao {
             coins.setTextContent(String.valueOf(jugador.getCoins()));
             jugadorElement.appendChild(coins);
 
-            // Añadir el jugador al documento
+            // se añade el jugador
             doc.getDocumentElement().appendChild(jugadorElement);
 
             // Guardar el documento XML
@@ -74,14 +74,20 @@ public class JugadorXMLDAO extends JugadorDao {
         }
     }
 
+    /**
+     * Elimina un jugador del archivo XML según su ID.
+     *
+     * @param id el ID del jugador a eliminar.
+     * @throws Exception por si hay algun problema.
+     */
     @Override
     public void eliminarJugador(int id) throws Exception {
         Document doc = getDocument();
-        NodeList jugadores = doc.getElementsByTagName("jugador");
+        NodeList jugadores = doc.getElementsByTagName("jugador");//obtengo los jugadores del xml
         
-        for (int i = 0; i < jugadores.getLength(); i++) {
+        for (int i = 0; i < jugadores.getLength(); i++) {//recorro la lista
             Element jugadorElement = (Element) jugadores.item(i);
-            if (Integer.parseInt(jugadorElement.getAttribute("id")) == id) {
+            if (Integer.parseInt(jugadorElement.getAttribute("id")) == id) {//si es el id deseado se elimina
                 jugadorElement.getParentNode().removeChild(jugadorElement);
                 break;
             }
@@ -90,12 +96,25 @@ public class JugadorXMLDAO extends JugadorDao {
         saveDocument(doc);
     }
 
+    /**
+     * Modifica los datos de un jugador machacando el antiguo y creo uno nuevo.
+     *
+     * @param jugador El jugador con los datos actualizados.
+     * @throws Exception por si hay algún problema al eliminar el jugador.
+     */
     @Override
     public void modificarJugador(Jugador jugador) throws Exception {
         eliminarJugador(jugador.getId());
         añadirJugador(jugador);
     }
 
+    /**
+     * Busca un jugador en el archivo XML por su ID.
+     *
+     * @param id El ID del jugador a buscar.
+     * @return El jugador encontrado o null si no existe(Jugador).
+     * @throws Exception por si hay algun problema al buscar el jugador.
+     */
     @Override
     public Jugador buscarPorID(int id) throws Exception {
         Document doc = getDocument();
@@ -111,6 +130,12 @@ public class JugadorXMLDAO extends JugadorDao {
         return null;
     }
 
+    /**
+     * Lista todos los jugadores almacenados en el archivo XML.
+     *
+     * @return Una lista de todos los jugadores(List).
+     * @throws Exception Si ocurre un error al listar los jugadores.
+     */
     @Override
     public List<Jugador> listarJugadores() throws Exception {
         List<Jugador> jugadores = new ArrayList<>();
@@ -125,12 +150,18 @@ public class JugadorXMLDAO extends JugadorDao {
         return jugadores;
     }
 
-    // Crear el objeto Document para manipular el XML
+    /**
+     * Obtiene el documento XML para manipularlo.
+     * Si el archivo XML no existe, lo crea.
+     *
+     * @return El Document parseado xml.
+     * @throws Exception por si ocurre algún fallo al crear el archivo.
+     */
     private Document getDocument() throws Exception {
         DocumentBuilderFactory fabrica = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = fabrica.newDocumentBuilder();
         
-        File xmlFile = new File("jugadores.xml");
+        File xmlFile = new File(FICHERO_XML);
         if (!xmlFile.exists()) {
             Document doc = builder.newDocument();
             Element root = doc.createElement("jugadores");
@@ -141,41 +172,26 @@ public class JugadorXMLDAO extends JugadorDao {
         return builder.parse(xmlFile);
     }
 
-    // Crear un elemento jugador en XML
-    private Element createJugadorElement(Document doc, Jugador jugador) {
-        Element jugadorElement = doc.createElement("jugador");
-        jugadorElement.setAttribute("id", String.valueOf(jugador.getId()));
-
-        Element nickElement = doc.createElement("nick");
-        nickElement.appendChild(doc.createTextNode(jugador.getNick()));
-        
-        Element experienceElement = doc.createElement("experience");
-        experienceElement.appendChild(doc.createTextNode(String.valueOf(jugador.getExperience())));
-        
-        Element lifeLevelElement = doc.createElement("life_level");
-        lifeLevelElement.appendChild(doc.createTextNode(String.valueOf(jugador.getLifeLevel())));
-        
-        Element coinsElement = doc.createElement("coins");
-        coinsElement.appendChild(doc.createTextNode(String.valueOf(jugador.getCoins())));
-        
-        jugadorElement.appendChild(nickElement);
-        jugadorElement.appendChild(experienceElement);
-        jugadorElement.appendChild(lifeLevelElement);
-        jugadorElement.appendChild(coinsElement);
-        
-        return jugadorElement;
-    }
-
-    // Guardar el documento XML en un archivo
+    /**
+     * Guarda la info en un xml.
+     *
+     * @param doc El objeto Document que representa el archivo XML actualizado.
+     * @throws TransformerException Si ocurre un error al guardar el documento XML.
+     */
     private void saveDocument(Document doc) throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File("jugadores.xml"));
+        StreamResult result = new StreamResult(new File(FICHERO_XML));
         transformer.transform(source, result);
     }
 
-    // Convertir un elemento XML a un objeto Jugador
+    /**
+     * Convierte un elemento XML en un objeto Jugador.
+     *
+     * @param jugadorElement el objeto XML que representa un jugador.
+     * @return El Jugador correspondiente.
+     */
     private Jugador parseJugadorElement(Element jugadorElement) {
         int id = Integer.parseInt(jugadorElement.getAttribute("id"));
         String nick = jugadorElement.getElementsByTagName("nick").item(0).getTextContent();
